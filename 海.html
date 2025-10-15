@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f9f9f9;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 100px;
+        }
+
+        /* 表情容器 */
+        #face {
+            width: 120px;
+            height: 120px;
+            background: #fff9e6;
+            border-radius: 50%;
+            margin: 0 0 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            transition: transform 0.8s ease;
+            box-shadow: 0 0 15px rgba(255, 223, 70, 0.15);
+        }
+
+        /* 表情放大效果 */
+        .grow {
+            transform: scale(1.4);
+        }
+
+        .grow-more {
+            transform: scale(1.8);
+        }
+
+        /* 按钮容器 */
+        .button-container {
+            position: relative;
+            width: 100%;
+            height: 300px; /* 给按钮移动留出空间 */
+        }
+
+        button {
+            padding: 12px 32px;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.5s ease; /* 平滑过渡效果，确保动画同步 */
+            position: absolute;
+        }
+
+        #btn-no {
+            background: #2ecc71;
+            /* 初始位置：居中 */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #btn-yes {
+            background: #e74c3c;
+            /* 初始位置：右侧居中 */
+            right: 20%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .shrink {
+            transform: scale(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="face">🤪</div>
+        
+        <div class="button-container">
+            <button id="btn-no">不让想</button>
+            <button id="btn-yes">想</button>
+        </div>
+    </div>
+
+    <script>
+        // 获取元素
+        const face = document.getElementById("face");
+        const btnNo = document.getElementById("btn-no");
+        const btnYes = document.getElementById("btn-yes");
+        
+        // 记录点击次数
+        let clickCount = 0;
+        
+        // 「不让想」按钮逻辑
+        btnNo.onclick = function() {
+            // 每次点击增加计数
+            clickCount++;
+            
+            // 表情放大
+            face.classList.add("grow");
+            
+            // 根据点击次数设置"想"按钮的放大比例
+            // 点击1次→1.5倍，点击2次→2倍，点击3次→2.5倍
+            const scale = 1 + (clickCount * 0.5);
+            btnYes.style.transform = `translateY(-50%) scale(${scale})`;
+            face.style.transform = `scale(${1.4 + (clickCount * 0.2)})`; // 表情也随点击次数增大
+            
+            switch(clickCount) {
+                case 1:
+                    // 第一次点击：跑到左边，缩小一半
+                    btnNo.style.left = "50px";
+                    btnNo.style.top = "50%";
+                    btnNo.style.transform = "translateY(-50%) scale(0.5)";
+                    break;
+                    
+                case 2:
+                    // 第二次点击：跑到上边，再缩小一半
+                    btnNo.style.left = "50%";
+                    btnNo.style.top = "50px";
+                    btnNo.style.transform = "translateX(-50%) scale(0.25)";
+                    break;
+                    
+                case 3:
+                    // 第三次点击：消失
+                    btnNo.style.transform = "scale(0)";
+                    setTimeout(() => {
+                        btnNo.style.display = "none";
+                    }, 500);
+                    break;
+            }
+        };
+
+        // 「想」按钮单独点击逻辑
+        btnYes.onclick = function() {
+            // 单独点击时直接放大到2倍
+            this.style.transform = "translateY(-50%) scale(2)";
+            face.classList.add("grow-more");
+            alert("都忙，忙点好啊～");
+        };
+    </script>
+</body>
+</html>
+    
+    
